@@ -1,0 +1,170 @@
+{
+  "@@locale": "en",
+  "appName": "Louco",
+  "@appName": {
+    "description": "Application name"
+  },
+  "navHome": "Home",
+  "@navHome": {
+    "description": "Bottom navigation home label"
+  },
+  "navSearch": "Search",
+  "@navSearch": {
+    "description": "Bottom navigation search label"
+  },
+  "navProfile": "Profile",
+  "@navProfile": {
+    "description": "Bottom navigation profile label"
+  },
+  "profileComingSoon": "Coming soon",
+  "@profileComingSoon": {
+    "description": "Profile placeholder subtitle"
+  },
+  "homeToday": "Today",
+  "@homeToday": {
+    "description": "Section heading for today's events"
+  },
+  "homeInCity": "in {city}",
+  "@homeInCity": {
+    "description": "City context shown next to 'Today'",
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSeeAll": "See All",
+  "@homeSeeAll": {
+    "description": "See-all button label"
+  },
+  "homeBuyTicket": "Buy Ticket",
+  "@homeBuyTicket": {
+    "description": "Buy ticket CTA button"
+  },
+  "homeMoreInfos": "More Infos",
+  "@homeMoreInfos": {
+    "description": "More info CTA button"
+  },
+  "homeMarkCalendar": "Mark your calendar",
+  "@homeMarkCalendar": {
+    "description": "Calendar action on event details"
+  },
+  "discoverTitle": "Discover events",
+  "@discoverTitle": {
+    "description": "Discover page heading"
+  },
+  "discoverSearchHint": "Search events...",
+  "@discoverSearchHint": {
+    "description": "Search field placeholder"
+  },
+  "discoverFilterDate": "Date",
+  "@discoverFilterDate": {
+    "description": "Date filter chip label"
+  },
+  "discoverFilterCategory": "Category",
+  "@discoverFilterCategory": {
+    "description": "Category filter chip label"
+  },
+  "discoverFilterCity": "City",
+  "@discoverFilterCity": {
+    "description": "City filter chip label"
+  },
+  "discoverFreeOnly": "Free only",
+  "@discoverFreeOnly": {
+    "description": "Free-only toggle label"
+  },
+  "discoverSort": "Sort",
+  "@discoverSort": {
+    "description": "Sort control label"
+  },
+  "discoverResultsFound": "{count} results found",
+  "@discoverResultsFound": {
+    "description": "Results count label",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "discoverAskAi": "Ask AI",
+  "@discoverAskAi": {
+    "description": "Ask AI button label"
+  },
+  "discoverTabEvents": "Events",
+  "@discoverTabEvents": {
+    "description": "Events tab label on discover page"
+  },
+  "discoverTabLocations": "Location",
+  "@discoverTabLocations": {
+    "description": "Locations tab label on discover page"
+  },
+  "discoverResultsFoundSuffix": " results found",
+  "@discoverResultsFoundSuffix": {
+    "description": "Suffix after the count in results found label"
+  },
+  "comingSoon": "Coming soon",
+  "@comingSoon": {
+    "description": "Generic coming soon placeholder"
+  },
+  "homeRetry": "Retry",
+  "@homeRetry": {
+    "description": "Retry button on home page error state"
+  },
+  "aiChatFailedTapToResend": "Failed · Tap to resend",
+  "@aiChatFailedTapToResend": {
+    "description": "Error label on failed chat message"
+  },
+  "aiChatGreeting": "Hey! 👋 I'm your event assistant. I can help you discover amazing events, find people to go with, or answer any questions about what's happening in your city!",
+  "@aiChatGreeting": {
+    "description": "Initial AI greeting message shown in chat on open"
+  },
+  "aiChatTitle": "Louco AI",
+  "@aiChatTitle": {
+    "description": "AI chat assistant name in header"
+  },
+  "aiChatSubtitle": "I'm your event assistant",
+  "@aiChatSubtitle": {
+    "description": "AI chat assistant subtitle in header"
+  },
+  "aiChatInputHint": "Ask me anything...",
+  "@aiChatInputHint": {
+    "description": "Chat text input placeholder"
+  },
+  "aiChatSuggestedPromptsLabel": "Suggested prompts:",
+  "@aiChatSuggestedPromptsLabel": {
+    "description": "Label above suggested prompt chips"
+  },
+  "aiChatPrompt1": "What's happening in Frankfurt tonight?",
+  "@aiChatPrompt1": {
+    "description": "First suggested prompt"
+  },
+  "aiChatPrompt2": "Show events near me",
+  "@aiChatPrompt2": {
+    "description": "Second suggested prompt"
+  },
+  "aiChatPrompt3": "Find someone to join me at an event",
+  "@aiChatPrompt3": {
+    "description": "Third suggested prompt"
+  },
+  "aiChatEventResultsLabel": "Event Results:",
+  "@aiChatEventResultsLabel": {
+    "description": "Heading above AI event results grid"
+  },
+  "aiChatRetry": "Retry",
+  "@aiChatRetry": {
+    "description": "Retry button in error banner"
+  },
+  "eventDetailsBuyTicket": "Buy Ticket",
+  "@eventDetailsBuyTicket": {
+    "description": "Buy ticket button on event details page"
+  },
+  "eventDetailsVenueName": "Holy Circle",
+  "@eventDetailsVenueName": {
+    "description": "Placeholder venue name on event details"
+  },
+  "eventDetailsVenueAddress": "Mainzer Landstraße 1, 60325 Frankfurt am Main",
+  "@eventDetailsVenueAddress": {
+    "description": "Placeholder venue address on event details"
+  }
+}
