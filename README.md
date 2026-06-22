@@ -66,15 +66,15 @@ lib/
 
 **State management:** `flutter_bloc` (BLoC pattern)
 
-- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message → loading →
-  AI response with events
+- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message (status: `sending`) → AI response with events (status: `sent` / `failed`). There is no separate loading state — the user message appears in the list immediately with a `sending` status, and the typing indicator is shown while the response is in flight. This keeps the UI responsive and avoids a blank loading screen.
 
 **Navigation:** `Navigator.push` from within the bottom nav shell; the bottom sheet dismisses itself
 before navigating to event details.
 
-**API:** Mocked via `AiChatRepository` with a simulated 1.2-second delay. The repository applies
-keyword matching to return contextually relevant events (e.g. "free", "pop", "tonight"). Swapping in
-a real endpoint means only changing `sendMessage()`.
+**API:** All data is mocked locally — there is no real backend.
+
+- `EventsDataSource` returns hardcoded event lists for the Home and Discover screens.
+- `AiChatDataSource` simulates a 1.2-second response delay and applies keyword matching to return contextually relevant events (e.g. "free", "pop", "tonight"). The **second message always fails on purpose** to demonstrate the error state and tap-to-retry flow. Swapping in a real endpoint means only changing `sendMessage()`.
 
 ## What Was Added
 
@@ -130,7 +130,6 @@ a real endpoint means only changing `sendMessage()`.
 
 ## Assumptions
 
-- No backend was provided, so API responses are mocked locally.
 - The Figma file shows a dark-mode-only design; no light-mode variant was implemented.
 - The Event Details page from the design was recreated (not reused from production code).
 - Profile tab is a placeholder — out of scope per the assignment.
