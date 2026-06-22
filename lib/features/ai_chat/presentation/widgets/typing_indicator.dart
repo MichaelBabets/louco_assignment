@@ -19,13 +19,16 @@ class TypingIndicator extends StatelessWidget {
               color: AppColors.primary,
               shape: BoxShape.circle,
             ),
-            child: SvgPicture.asset(
-              'assets/icons/ic_ai_sparkle.svg',
-              width: 14,
-              height: 14,
-              colorFilter: const ColorFilter.mode(
-                Colors.black,
-                BlendMode.srcIn,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                'assets/icons/ic_ai_sparkle.svg',
+                width: 14,
+                height: 14,
+                colorFilter: const ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),

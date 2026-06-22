@@ -66,7 +66,7 @@ lib/
 
 **State management:** `flutter_bloc` (BLoC pattern)
 
-- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message (status: `sending`) → AI response with events (status: `sent` / `failed`). There is no separate loading state — the user message appears in the list immediately with a `sending` status, and the typing indicator is shown while the response is in flight. This keeps the UI responsive and avoids a blank loading screen.
+- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message (status: `sending`) → typing indicator → AI response with events (status: `sent` / `failed`). There is no separate loading state — the user message appears in the list immediately with a `sending` status, and a typing indicator is shown while the response is in flight. This keeps the UI responsive and avoids a blank loading screen.
 
 **Navigation:** `Navigator.push` from within the bottom nav shell; the bottom sheet dismisses itself
 before navigating to event details.

@@ -36,13 +36,17 @@ class ChatMessage extends Equatable {
 }
 
 class AiChatState extends Equatable {
-  const AiChatState({this.messages = const []});
+  const AiChatState({this.messages = const [], this.isTyping = false});
 
   final List<ChatMessage> messages;
+  final bool isTyping;
 
-  AiChatState copyWith({List<ChatMessage>? messages}) =>
-      AiChatState(messages: messages ?? this.messages);
+  AiChatState copyWith({List<ChatMessage>? messages, bool? isTyping}) =>
+      AiChatState(
+        messages: messages ?? this.messages,
+        isTyping: isTyping ?? this.isTyping,
+      );
 
   @override
-  List<Object?> get props => [messages];
+  List<Object?> get props => [messages, isTyping];
 }

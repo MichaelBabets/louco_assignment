@@ -43,8 +43,12 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
       status: MessageStatus.sending,
     );
 
-    // Message appears immediately — no loader
-    emit(state.copyWith(messages: [...state.messages, userMessage]));
+    emit(
+      state.copyWith(
+        messages: [...state.messages, userMessage],
+        isTyping: true,
+      ),
+    );
 
     await _dispatchToRepository(messageId, event.message, emit);
   }
@@ -65,6 +69,7 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
           event.messageId,
           MessageStatus.sending,
         ),
+        isTyping: true,
       ),
     );
 
@@ -94,7 +99,9 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
         events: response.events.isNotEmpty ? response.events : null,
       );
 
-      emit(state.copyWith(messages: [...withSent, aiMessage]));
+      emit(
+        state.copyWith(messages: [...withSent, aiMessage], isTyping: false),
+      );
     } catch (_) {
       emit(
         state.copyWith(
@@ -103,6 +110,7 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
             messageId,
             MessageStatus.failed,
           ),
+          isTyping: false,
         ),
       );
     }

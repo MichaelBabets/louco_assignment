@@ -6,6 +6,7 @@ import '../../bloc/ai_chat_bloc.dart';
 import 'chat_bubble.dart';
 import 'event_results_grid.dart';
 import 'suggested_prompts.dart';
+import 'typing_indicator.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({super.key, required this.onEventTap});
@@ -52,6 +53,7 @@ class _MessageListState extends State<MessageList> {
               (msg) =>
                   _MessageItem(message: msg, onEventTap: widget.onEventTap),
             ),
+            if (state.isTyping) const TypingIndicator(),
             if (showSuggested)
               SuggestedPrompts(
                 onPromptSelected: (prompt) {
