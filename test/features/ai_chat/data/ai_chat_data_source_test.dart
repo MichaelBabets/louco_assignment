@@ -78,5 +78,21 @@ void main() {
       final response = await ds.sendMessage('retry');
       expect(response.events, isNotEmpty);
     });
+
+    test('fourth call returns an empty response', () async {
+      final ds = MockAiChatDataSource(initialCallCount: 3);
+      final response = await ds.sendMessage('anything');
+      expect(response.text, isEmpty);
+      expect(response.events, isEmpty);
+    });
+
+    test('fifth call succeeds after the fourth returns empty', () async {
+      final ds = MockAiChatDataSource(initialCallCount: 3);
+      // 4th call — empty response
+      await ds.sendMessage('anything');
+      // 5th call — success
+      final response = await ds.sendMessage('anything again');
+      expect(response.text, isNotEmpty);
+    });
   });
 }

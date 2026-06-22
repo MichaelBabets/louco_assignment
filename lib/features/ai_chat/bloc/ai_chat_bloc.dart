@@ -24,6 +24,7 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
       ) {
     on<SendMessageEvent>(_onSendMessage);
     on<ResendMessageEvent>(_onResendMessage);
+    on<RetryEmptyResponseEvent>(_onRetryEmptyResponse);
     on<ToggleFavoriteEvent>(_onToggleFavorite);
     on<ResetChatEvent>(_onResetChat);
   }
@@ -99,6 +100,24 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
         events: response.events.isNotEmpty ? response.events : null,
       );
 
+      if (response.text.isEmpty) {
+        final aiMessage = ChatMessage(
+          id: 'ai_${DateTime.now().millisecondsSinceEpoch}',
+          text: '',
+          role: MessageRole.assistant,
+          timestamp: DateTime.now(),
+          isEmptyResponse: true,
+          retryText: text,
+        );
+        emit(
+          state.copyWith(
+            messages: [...withSent, aiMessage],
+            isTyping: false,
+          ),
+        );
+        return;
+      }
+
       emit(
         state.copyWith(messages: [...withSent, aiMessage], isTyping: false),
       );
@@ -114,6 +133,25 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
         ),
       );
     }
+  }
+
+  Future<void> _onRetryEmptyResponse(
+    RetryEmptyResponseEvent event,
+    Emitter<AiChatState> emit,
+  ) async {
+    final emptyMsg = state.messages.firstWhere(
+      (m) => m.id == event.aiMessageId,
+      orElse: () => throw StateError('Message not found: ${event.aiMessageId}'),
+    );
+    final retryText = emptyMsg.retryText ?? '';
+    final messagesWithoutEmpty =
+        state.messages.where((m) => m.id != event.aiMessageId).toList();
+    emit(state.copyWith(messages: messagesWithoutEmpty, isTyping: true));
+    await _dispatchToRepository(
+      'user_${DateTime.now().millisecondsSinceEpoch}',
+      retryText,
+      emit,
+    );
   }
 
   void _onToggleFavorite(ToggleFavoriteEvent event, Emitter<AiChatState> emit) {

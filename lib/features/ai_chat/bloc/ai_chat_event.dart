@@ -34,6 +34,15 @@ class ToggleFavoriteEvent extends AiChatEvent {
   List<Object?> get props => [eventId];
 }
 
+class RetryEmptyResponseEvent extends AiChatEvent {
+  const RetryEmptyResponseEvent(this.aiMessageId);
+
+  final String aiMessageId;
+
+  @override
+  List<Object?> get props => [aiMessageId];
+}
+
 class ResetChatEvent extends AiChatEvent {
   const ResetChatEvent();
 }

@@ -10,7 +10,9 @@ abstract class AiChatDataSource {
 /// Mock data source that simulates network behaviour:
 /// - 1st call: success
 /// - 2nd call: throws (simulates a transient network error)
-/// - 3rd+ calls: success again
+/// - 3rd call: success again
+/// - 4th call: returns an empty response (simulates an empty/unrecognised reply)
+/// - 5th+ calls: success again
 class MockAiChatDataSource implements AiChatDataSource {
   MockAiChatDataSource({int initialCallCount = 0})
     : _callCount = initialCallCount;
@@ -23,6 +25,9 @@ class MockAiChatDataSource implements AiChatDataSource {
     _callCount++;
     if (_callCount == 2) {
       throw Exception('Network error. Please try again.');
+    }
+    if (_callCount == 4) {
+      return const AiResponse(text: '', events: []);
     }
     return AiResponse(
       text: _responseText(message),

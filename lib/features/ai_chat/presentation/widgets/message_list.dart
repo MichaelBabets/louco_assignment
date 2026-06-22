@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/models/event.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../bloc/ai_chat_bloc.dart';
 import 'chat_bubble.dart';
 import 'event_results_grid.dart';
@@ -76,6 +77,9 @@ class _MessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (message.isEmptyResponse) {
+      return _EmptyResponseRetry(message: message);
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,6 +95,38 @@ class _MessageItem extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _EmptyResponseRetry extends StatelessWidget {
+  const _EmptyResponseRetry({required this.message});
+
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: GestureDetector(
+        onTap: () => context
+            .read<AiChatBloc>()
+            .add(RetryEmptyResponseEvent(message.id)),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.refresh, color: AppColors.textMuted, size: 14),
+            SizedBox(width: 6),
+            Text(
+              'No response received. Tap to retry.',
+              style: TextStyle(
+                color: AppColors.textMuted,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

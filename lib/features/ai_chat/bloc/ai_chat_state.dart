@@ -12,6 +12,8 @@ class ChatMessage extends Equatable {
     required this.timestamp,
     this.events,
     this.status = MessageStatus.sent,
+    this.isEmptyResponse = false,
+    this.retryText,
   });
 
   final String id;
@@ -20,19 +22,35 @@ class ChatMessage extends Equatable {
   final DateTime timestamp;
   final List<Event>? events;
   final MessageStatus status;
+  final bool isEmptyResponse;
+  final String? retryText;
 
-  ChatMessage copyWith({List<Event>? events, MessageStatus? status}) =>
-      ChatMessage(
-        id: id,
-        text: text,
-        role: role,
-        timestamp: timestamp,
-        events: events ?? this.events,
-        status: status ?? this.status,
-      );
+  ChatMessage copyWith({
+    List<Event>? events,
+    MessageStatus? status,
+    bool? isEmptyResponse,
+  }) => ChatMessage(
+    id: id,
+    text: text,
+    role: role,
+    timestamp: timestamp,
+    events: events ?? this.events,
+    status: status ?? this.status,
+    isEmptyResponse: isEmptyResponse ?? this.isEmptyResponse,
+    retryText: retryText,
+  );
 
   @override
-  List<Object?> get props => [id, text, role, timestamp, events, status];
+  List<Object?> get props => [
+    id,
+    text,
+    role,
+    timestamp,
+    events,
+    status,
+    isEmptyResponse,
+    retryText,
+  ];
 }
 
 class AiChatState extends Equatable {

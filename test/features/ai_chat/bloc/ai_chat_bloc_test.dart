@@ -28,6 +28,12 @@ class _ErrorRepository implements AiChatRepository {
       throw Exception('Network error. Please try again.');
 }
 
+class _EmptyRepository implements AiChatRepository {
+  @override
+  Future<AiResponse> sendMessage(String message) async =>
+      const AiResponse(text: '', events: []);
+}
+
 final _fakeEvent = Event(
   id: 'test_1',
   title: 'Test Event',
@@ -200,6 +206,127 @@ void main() {
         predicate<AiChatState>(
           (s) => s.messages.first.events!.first.isFavorited == false,
         ),
+      ],
+    );
+
+    // -----------------------------------------------------------------------
+    // Empty response
+    // -----------------------------------------------------------------------
+
+    blocTest<AiChatBloc, AiChatState>(
+      'SendMessageEvent: empty response emits isEmptyResponse AI message',
+      build: () => _bloc(repository: _EmptyRepository()),
+      act: (bloc) => bloc.add(const SendMessageEvent('Hello')),
+      skip: 1,
+      expect: () => [
+        predicate<AiChatState>(
+          (s) =>
+              s.messages.length == 3 &&
+              s.messages.last.role == MessageRole.assistant &&
+              s.messages.last.isEmptyResponse == true &&
+              s.messages.last.retryText == 'Hello' &&
+              s.isTyping == false,
+        ),
+      ],
+    );
+
+    blocTest<AiChatBloc, AiChatState>(
+      'SendMessageEvent: isTyping is true while empty response is in flight',
+      build: () => _bloc(repository: _EmptyRepository()),
+      act: (bloc) => bloc.add(const SendMessageEvent('Hello')),
+      expect: () => [
+        predicate<AiChatState>((s) => s.isTyping == true),
+        predicate<AiChatState>((s) => s.isTyping == false),
+      ],
+    );
+
+    blocTest<AiChatBloc, AiChatState>(
+      'RetryEmptyResponseEvent: removes empty message and re-sends, '
+      'emitting a real AI response on success',
+      build: () => _bloc(repository: const _SuccessRepository()),
+      seed: () => AiChatState(
+        messages: [
+          ChatMessage(
+            id: 'greeting',
+            text: 'Hi',
+            role: MessageRole.assistant,
+            timestamp: DateTime(2025),
+          ),
+          ChatMessage(
+            id: 'user_1',
+            text: 'Hello',
+            role: MessageRole.user,
+            timestamp: DateTime(2025),
+            status: MessageStatus.sent,
+          ),
+          ChatMessage(
+            id: 'ai_empty',
+            text: '',
+            role: MessageRole.assistant,
+            timestamp: DateTime(2025),
+            isEmptyResponse: true,
+            retryText: 'Hello',
+          ),
+        ],
+      ),
+      act: (bloc) =>
+          bloc.add(const RetryEmptyResponseEvent('ai_empty')),
+      expect: () => [
+        // Empty message removed, isTyping = true
+        predicate<AiChatState>(
+          (s) =>
+              s.messages.length == 2 &&
+              s.messages.every((m) => !m.isEmptyResponse) &&
+              s.isTyping == true,
+        ),
+        // Real AI response appended, isTyping = false
+        predicate<AiChatState>(
+          (s) =>
+              s.messages.length == 3 &&
+              s.messages.last.role == MessageRole.assistant &&
+              s.messages.last.isEmptyResponse == false &&
+              s.messages.last.text.isNotEmpty &&
+              s.isTyping == false,
+        ),
+      ],
+    );
+
+    blocTest<AiChatBloc, AiChatState>(
+      'RetryEmptyResponseEvent: marks user message failed '
+      'when retry also throws',
+      build: () => _bloc(repository: _ErrorRepository()),
+      seed: () => AiChatState(
+        messages: [
+          ChatMessage(
+            id: 'greeting',
+            text: 'Hi',
+            role: MessageRole.assistant,
+            timestamp: DateTime(2025),
+          ),
+          ChatMessage(
+            id: 'user_1',
+            text: 'Hello',
+            role: MessageRole.user,
+            timestamp: DateTime(2025),
+            status: MessageStatus.sent,
+          ),
+          ChatMessage(
+            id: 'ai_empty',
+            text: '',
+            role: MessageRole.assistant,
+            timestamp: DateTime(2025),
+            isEmptyResponse: true,
+            retryText: 'Hello',
+          ),
+        ],
+      ),
+      act: (bloc) =>
+          bloc.add(const RetryEmptyResponseEvent('ai_empty')),
+      expect: () => [
+        predicate<AiChatState>(
+          (s) => s.messages.length == 2 && s.isTyping == true,
+        ),
+        predicate<AiChatState>((s) => s.isTyping == false),
       ],
     );
 
