@@ -66,7 +66,7 @@ lib/
 
 **State management:** `flutter_bloc` (BLoC pattern)
 
-- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message (status: `sending`) → typing indicator → AI response with events (status: `sent` / `failed`). There is no separate loading state — the user message appears in the list immediately with a `sending` status, and a typing indicator is shown while the response is in flight. This keeps the UI responsive and avoids a blank loading screen.
+- `AiChatBloc` manages the full conversation lifecycle: initial greeting → user message (status: `sending`) → typing indicator → AI response with events (status: `sent` / `failed` / empty). There is no separate loading state — the user message appears in the list immediately with a `sending` status, and a typing indicator is shown while the response is in flight. If the API returns an empty response, a retry button is shown in place of the AI bubble; tapping it removes the placeholder and re-sends the original message.
 
 **Navigation:** `Navigator.push` from within the bottom nav shell; the bottom sheet dismisses itself
 before navigating to event details.
@@ -74,7 +74,14 @@ before navigating to event details.
 **API:** All data is mocked locally — there is no real backend.
 
 - `EventsDataSource` returns hardcoded event lists for the Home and Discover screens.
-- `AiChatDataSource` simulates a 1.2-second response delay and applies keyword matching to return contextually relevant events (e.g. "free", "pop", "tonight"). The **second message always fails on purpose** to demonstrate the error state and tap-to-retry flow. Swapping in a real endpoint means only changing `sendMessage()`.
+- `AiChatDataSource` simulates a 1.2-second response delay and applies keyword matching to return contextually relevant events (e.g. "free", "pop", "tonight"). The mock cycles through fixed behaviours to demonstrate all UI states:
+  - **1st call** — success with events
+  - **2nd call** — throws, to demonstrate the error state and tap-to-retry on the user bubble
+  - **3rd call** — success again
+  - **4th call** — returns an empty response, to demonstrate the empty-response retry button in place of the AI bubble
+  - **5th+ calls** — success
+
+  Swapping in a real endpoint means only changing `sendMessage()`.
 
 ## What Was Added
 
